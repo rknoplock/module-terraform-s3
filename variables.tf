@@ -28,6 +28,7 @@ variable "tags" {
 }
 
 variable "aws_region" {
-  description = "Região AWS onde o bucket será criado"
+  description = "Região AWS para o provider"
   type        = string
+  default     = "us-east-1"
 }
