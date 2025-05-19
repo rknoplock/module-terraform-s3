@@ -42,7 +42,48 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
   count  = length(var.lifecycle_rules) > 0 ? 1 : 0
   bucket = aws_s3_bucket.this.id
 
-  rule = var.lifecycle_rules
+  dynamic "rule" {
+    for_each = var.lifecycle_rules
+    content {
+      id     = rule.value.id
+      status = rule.value.status
+
+      dynamic "filter" {
+        for_each = (rule.value.prefix != null || length(try(rule.value.tags, {})) > 0) ? [1] : []
+        content {
+          prefix = rule.value.prefix
+
+          dynamic "tags" {
+            for_each = length(try(rule.value.tags, {})) > 0 ? [rule.value.tags] : []
+            content  = tags.value
+          }
+        }
+      }
+
+      dynamic "expiration" {
+        for_each = rule.value.expiration != null ? [rule.value.expiration] : []
+        content {
+          days                         = lookup(expiration.value, "days", null)
+          expired_object_delete_marker = lookup(expiration.value, "expired_object_delete_marker", null)
+        }
+      }
+
+      dynamic "abort_incomplete_multipart_upload" {
+        for_each = lookup(rule.value, "abort_incomplete_multipart_upload_days", null) != null ? [rule.value.abort_incomplete_multipart_upload_days] : []
+        content {
+          days_after_initiation = abort_incomplete_multipart_upload.value
+        }
+      }
+
+      dynamic "transition" {
+        for_each = lookup(rule.value, "transition", [])
+        content {
+          days          = transition.value.days
+          storage_class = transition.value.storage_class
+        }
+      }
+    }
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "this" {
