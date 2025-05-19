@@ -1,6 +1,7 @@
 resource "aws_s3_bucket" "this" {
-  bucket = var.bucket_name
+  bucket        = var.bucket_name
   force_destroy = var.force_destroy
+  acl           = var.acl
 
   tags = var.tags
 }
@@ -21,4 +22,20 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
       sse_algorithm = "AES256"
     }
   }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "this" {
+  count  = length(var.lifecycle_rules) > 0 ? 1 : 0
+  bucket = aws_s3_bucket.this.id
+
+  rule = var.lifecycle_rules
+}
+
+resource "aws_s3_bucket_public_access_block" "this" {
+  count                   = var.block_public_access ? 1 : 0
+  bucket                  = aws_s3_bucket.this.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
