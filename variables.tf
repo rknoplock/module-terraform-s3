@@ -30,5 +30,4 @@ variable "tags" {
 variable "aws_region" {
   description = "Região AWS onde o bucket será criado"
   type        = string
-  default     = true
 }
