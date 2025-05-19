@@ -1,34 +1,16 @@
-variable "bucket_name" {
-  description = "Nome do bucket S3"
+variable "aws_region" {
+  description = "Região AWS"
   type        = string
-}
-
-variable "force_destroy" {
-  description = "Força a destruição do bucket mesmo com objetos"
-  type        = bool
-  default     = false
+  default     = "us-east-1"
 }
 
 variable "acl" {
-  description = "ACL do bucket (ex: private, public-read)"
+  description = "ACL do bucket S3"
   type        = string
   default     = "private"
 }
 
-variable "block_public_access" {
-  description = "Bloqueia acesso público ao bucket"
-  type        = bool
-  default     = true
-}
-
-variable "tags" {
-  description = "Tags aplicadas ao bucket"
-  type        = map(string)
-  default     = {}
-}
-
-variable "aws_region" {
-  description = "Região AWS para o provider"
+variable "bucket_name" {
+  description = "Nome do bucket S3"
   type        = string
-  default     = "us-east-1"
 }
