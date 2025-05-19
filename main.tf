@@ -17,6 +17,6 @@ resource "aws_s3_bucket" "this" {
   acl    = var.acl
 
   tags = {
-    Name = var.bucket_name
+    Name = var.tags
   }
 }
