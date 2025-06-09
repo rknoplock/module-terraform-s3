@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket = "meu-state-bucket"
-    key    = "s3/${var.bucket_name}.tfstate"
+    bucket = "rknoplock-remote-state"
+    key    = "s3-buckets/${var.bucket_name}.tfstate"
     region = "us-east-1"
   }
 
