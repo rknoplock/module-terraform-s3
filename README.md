@@ -34,7 +34,7 @@ Este módulo cria um bucket S3 na AWS com opções configuráveis para:
 
 ```hcl
 module "s3_bucket" {
-  source = "git::https://github.com/seu-org/module-terraform-s3.git?ref=v0.0.2"
+  source = "git::https://github.com/rknoplock/module-terraform-s3.git?ref=v0.0.3"
 
   bucket_name         = "meu-bucket-teste"
   tags = {
